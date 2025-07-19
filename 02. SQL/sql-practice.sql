@@ -227,12 +227,120 @@ from patients;
 
 Q23. Show first and last name, allergies from patients which have allergies to either 'Penicillin' or 'Morphine'. Show results ordered ascending by allergies then by first_name then by last_name.
 Query 1:
+SELECT first_name, last_name, allergies
+FROM patients
+WHERE allergies = 'Penicillin' OR allergies = 'Morphine'
+ORDER BY allergies ASC, first_name ASC, last_name ASC;
+
+Q24. Show patient_id, diagnosis from admissions. Find patients admitted multiple times for the same diagnosis.
+Query 1:
+SELECT patient_id, diagnosis
+FROM admissions
+GROUP BY patient_id, diagnosis
+HAVING COUNT(*) > 1;
+
+Q25. Show the city and the total number of patients in the city. Order from most to least patients and then by city name ascending.
+Query 1: 
+select city, count(patient_id) as num_patients
+from patients
+group by city
+order by count(patient_id) desc, city;
+
+Q26. Show first name, last name and role of every person that is either patient or doctor. The roles are either "Patient" or "Doctor".
+Query 1: 
+SELECT first_name, last_name, 'Patient' AS role
+FROM patients
+
+UNION ALL
+
+SELECT first_name, last_name, 'Doctor' AS role
+FROM doctors;
+
+Q27. Show all allergies ordered by popularity. Remove NULL values from query.
+Query 1:
+SELECT
+  allergies,
+  COUNT(*) AS total_diagnosis
+FROM patients
+WHERE
+  allergies IS NOT NULL
+GROUP BY allergies
+ORDER BY total_diagnosis DESC
+
+Q28. Show all patient's first_name, last_name, and birth_date who were born in the 1970s decade. Sort the list starting from the earliest birth_date.
+Query 1:
+SELECT
+  first_name,
+  last_name,
+  birth_date
+FROM patients
+WHERE
+  YEAR(birth_date) BETWEEN 1970 AND 1979
+ORDER BY birth_date ASC;
+
+Query 2:
+SELECT
+  first_name,
+  last_name,
+  birth_date
+FROM patients
+WHERE
+  birth_date >= '1970-01-01'
+  AND birth_date < '1980-01-01'
+ORDER BY birth_date ASC
+
+Query 3:
+SELECT
+  first_name,
+  last_name,
+  birth_date
+FROM patients
+WHERE year(birth_date) LIKE '197%'
+ORDER BY birth_date ASC
+
+Q29. We want to display each patient's full name in a single column. Their last_name in all upper letters must appear first, then first_name in all lower case letters. Separate the last_name and first_name with a comma. Order the list by the first_name in decending order
+EX: SMITH,jane
+
+Query 1:
+SELECT CONCAT(UPPER(last_name), ',', LOWER(first_name)) AS full_name
+FROM patients
+ORDER BY first_name DESC;
+
+
+Q30. Show the province_id(s), sum of height; where the total sum of its patient's height is greater than or equal to 7,000.
+Query 1: 
+ select province_id, sum(height) as sum_height
+ from patients
+ group by province_id
+ having sum_height >= 7000;
+
+ Query 2:
+ select * from (select province_id, SUM(height) as sum_height FROM patients group by province_id) where sum_height >= 7000;
+
+
+ Q31. Show the difference between the largest weight and smallest weight for patients with the last name 'Maroni'.
+ Query 1:
+ SELECT MAX(weight) - MIN(weight) AS weight_difference
+FROM patients
+WHERE last_name = 'Maroni';
 
 
 
 
+Q32. Show all of the days of the month (1-31) and how many admission_dates occurred on that day. Sort by the day with most admissions to least admissions.
+Query 1:
+SELECT 
+  DAY(admission_date) AS day_of_month,
+  COUNT(*) AS admission_count
+FROM admissions
+GROUP BY day_of_month
+ORDER BY admission_count DESC;
 
 
+
+
+Q33. Show all columns for patient_id 542's most recent admission_date.
+Query 1:
 
 
 
