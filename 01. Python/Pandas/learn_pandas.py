@@ -9,3 +9,7 @@ df = pd.DataFrame({
 })
 
 print(df)
+
+df.to_csv('students')
+
+df.to_csv('student_false_index', index=False)
