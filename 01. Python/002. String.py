@@ -5,3 +5,6 @@ my_message = "How are you ?"
 
 print(message)
 print(my_message)
+
+name = "Talib"
+print(name.split(","))
